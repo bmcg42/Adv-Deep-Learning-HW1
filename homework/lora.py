@@ -26,13 +26,20 @@ class LoRALinear(HalfLinear):
         """
         super().__init__(in_features, out_features, bias)
 
-        # TODO: Implement LoRA, initialize the layers, and make sure they are trainable
-        # Keep the LoRA layers in float32
-        raise NotImplementedError()
+        # freeze original weights
+        for param in self.parameters():
+            param.requires_grad = False
+        
+        # Add lora layers
+        self.lora_a = torch.nn.Linear(in_features,lora_dim,dtype=torch.float32)
+        self.lora_b = torch.nn.Linear(lora_dim, out_features,dtype=torch.float32)
+
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # TODO: Forward. Make sure to cast inputs to self.linear_dtype and the output back to x.dtype
-        raise NotImplementedError()
+        high_prec = super().forward(x) # converts down to 16 then up to 32
+        result = high_prec + self.lora_b(self.lora_a(x))
+        return result
+        
 
 
 class LoraBigNet(torch.nn.Module):
