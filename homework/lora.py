@@ -60,17 +60,17 @@ class LoraBigNet(torch.nn.Module):
     def __init__(self, lora_dim: int = 32):
         super().__init__()
         self.model = torch.nn.Sequential(
-            self.Block(BIGNET_DIM),
+            self.Block(BIGNET_DIM, lora_dim),
             LayerNorm(BIGNET_DIM),
-            self.Block(BIGNET_DIM),
+            self.Block(BIGNET_DIM, lora_dim),
             LayerNorm(BIGNET_DIM),
-            self.Block(BIGNET_DIM),
+            self.Block(BIGNET_DIM, lora_dim),
             LayerNorm(BIGNET_DIM),
-            self.Block(BIGNET_DIM),
+            self.Block(BIGNET_DIM, lora_dim),
             LayerNorm(BIGNET_DIM),
-            self.Block(BIGNET_DIM),
+            self.Block(BIGNET_DIM, lora_dim),
             LayerNorm(BIGNET_DIM),
-            self.Block(BIGNET_DIM),
+            self.Block(BIGNET_DIM, lora_dim),
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
