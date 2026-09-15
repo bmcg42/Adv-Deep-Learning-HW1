@@ -46,16 +46,32 @@ class LoraBigNet(torch.nn.Module):
     class Block(torch.nn.Module):
         def __init__(self, channels: int, lora_dim: int):
             super().__init__()
-            # TODO: Implement me (feel free to copy and reuse code from bignet.py)
-            raise NotImplementedError()
+            self.model = torch.nn.Sequential(
+                LoRALinear(channels, channels, lora_dim),
+                torch.nn.ReLU(),
+                LoRALinear(channels, channels, lora_dim),
+                torch.nn.ReLU(),
+                LoRALinear(channels, channels, lora_dim),
+            )
 
         def forward(self, x: torch.Tensor):
             return self.model(x) + x
 
     def __init__(self, lora_dim: int = 32):
         super().__init__()
-        # TODO: Implement me (feel free to copy and reuse code from bignet.py)
-        raise NotImplementedError()
+        self.model = torch.nn.Sequential(
+            self.Block(BIGNET_DIM),
+            LayerNorm(BIGNET_DIM),
+            self.Block(BIGNET_DIM),
+            LayerNorm(BIGNET_DIM),
+            self.Block(BIGNET_DIM),
+            LayerNorm(BIGNET_DIM),
+            self.Block(BIGNET_DIM),
+            LayerNorm(BIGNET_DIM),
+            self.Block(BIGNET_DIM),
+            LayerNorm(BIGNET_DIM),
+            self.Block(BIGNET_DIM),
+        )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.model(x)
