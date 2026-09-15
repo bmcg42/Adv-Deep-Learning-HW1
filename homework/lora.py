@@ -33,6 +33,9 @@ class LoRALinear(HalfLinear):
         # Add lora layers
         self.lora_a = torch.nn.Linear(in_features,lora_dim,dtype=torch.float32)
         self.lora_b = torch.nn.Linear(lora_dim, out_features,dtype=torch.float32)
+        # init B to zeros
+        torch.nn.init.zeros_(self.lora_b.weight)
+        torch.nn.init.zeros_(self.lora_b.bias)
 
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
