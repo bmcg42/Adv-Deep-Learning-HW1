@@ -23,6 +23,7 @@ class HalfLinear(torch.nn.Linear):
             bias=bias,
             dtype=torch.float16,
         )
+        self.requires_grad_(False)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # Hint: Use the .to method to cast a tensor to a different dtype (i.e. torch.float16 or x.dtype)
